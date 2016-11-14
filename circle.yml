@@ -3,4 +3,4 @@ dependencies:
     - npm install -g dredd@stable
 test:
   pre:
-    - dredd init -r apiary -j apiaryApiKey:${apiaryApiKey} -j apiaryApiName:restapidoc
+    - dredd -j apiaryApiKey:${apiaryApiKey} -j apiaryApiName:restapidoc

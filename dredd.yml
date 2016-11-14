@@ -1,7 +1,5 @@
 reporter: apiary
-custom:
-  apiaryApiKey: ${apiaryApiKey}
-  apiaryApiName: restapidoc
+custom: {}
 dry-run: null
 hookfiles: null
 language: nodejs
