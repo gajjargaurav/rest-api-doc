@@ -1,0 +1,31 @@
+{
+  "name": "rest-api-doc",
+  "version": "0.0.1",
+  "description": "",
+  "main": "api.apib",
+  "scripts": {
+    "build": "./node_modules/.bin/hercule src/api.md -o api.apib",
+    "release": "npm run build && standard-version",
+    "start": "./node_modules/.bin/aglio --theme-variables default -i api.apib -s",
+    "mock": "./node_modules/.bin/drakov -f \"api.apib\" --autoOptions --header Authorization --method DELETE --method PUT --method PATCH",
+    "test": "NODE_ENV=test ./node_modules/.bin/dredd"
+  },
+  "keywords": [],
+  "author": "Gaurav Gajjar",
+  "license": "ISC",
+  "dependencies": {
+    "aglio": "^2.3.0",
+    "drakov": "^1.0.1",
+    "dredd": "^2.2.3",
+    "hercule": "^3.1.0"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "^1.2.0",
+    "standard-version": "^3.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
