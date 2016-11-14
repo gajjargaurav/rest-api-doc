@@ -1,80 +1,95 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
 
-# rest-api-doc
+# REST API Specification
+Testing out an awesome REST API documentation
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+## The Basics
+The API is designed according to REST principles. All API access is over HTTPS.
 
-## Questions Collection [/questions]
+The API accepts JSON in request bodies and requires that the `content-type: application/json; charset=utf-8` header be specified for all such requests. The API will always respond with a JSON object. Depending on the context, resources may be returned as single objects or as arrays of objects, nested within the response object.
 
-### List All Questions [GET]
+All timestamps are returned in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
 
-+ Response 200 (application/json)
+## HTTP Verbs
+Where possible, standard [HTTP Verbs](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods) are used for each action.
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
+Verb | Description
+--- | ---
+GET | Used for retrieving resources
+POST | Used for creating resources
+PATCH | Used for updating resources with partial JSON data.
+DELETE | Used for deleting resources
 
-### Create a New Question [POST]
+## Status codes
+The API uses standard [HTTP Status Codes](https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md) to communicate the response status.
 
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
+## Rate Limits
+At this stage there is no specified rate limiting mechanism in place. The API would start returning the `429 Too Many Requests` HTTP status code if such limits were to be exceeded.
 
-+ Request (application/json)
+## Group API Root
 
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
+This resource offers the initial API capabilities in
+the form of the links in the JSON body.
 
-+ Response 201 (application/json)
+# Group Users
+Resources related to users in the API.
 
+## User Collection [/users]
+
+### List All Users [GET]
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (array[User Response])
+
+### Signup [POST]
+ Create new user by posting a JSON object
+
++ Request (application/json; charset=utf-8)
+    + Attributes (User Request)
+
++ Response 201 (application/json; charset=utf-8)
     + Headers
 
-            Location: /questions/2
+            Location: /users/userid
+    + Attributes (User Response)
+## User [/users/{user_id}]
 
-    + Body
++ Parameters
+    + user_id: userid (required, string)
 
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
+### View profile [GET]
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (User Response)
+
+### Update a profile [PATCH]
+
++ Request (application/json; charset=utf-8)
+    + Attributes (User Base)
+        * firstName: Jane
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (User Response)
+        * firstName: Jane
+
+### Delete a user [DELETE]
+
++ Response 204
+
+# Data Structures
+## User Base
+* firstName: John (string)
+* lastName: Doe (string)
+* email: john.doe@bigshop.com (string)
+* profileImg: https://s3.amazonaws.com/uifaces/faces/twitter/igorgarybaldi/128.jpg (string)
+
+## User Request
+* Include (User Base)
+
+* password: password (string)
+
+## User Response
+* Include (User Base)
+
+* `_id`: ObjectId (string, required)
+* createdAt: `2016-09-15` (string)
